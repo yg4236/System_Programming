@@ -28,7 +28,7 @@
 ### 시나리오 다이어그램
 ![image](https://user-images.githubusercontent.com/62757915/104407870-0151c400-55a6-11eb-9644-eeabc95389a6.png)
 ### 구조도 (구현 세트장)
-
+![image](https://user-images.githubusercontent.com/62757915/104407977-41b14200-55a6-11eb-9904-5487184dab79.png)
 <br>
 실행에는 3개의 파이 및 알맞는 회로 필요.<br>
 1,3번 pi는 client, 2번 pi는 server의 역할을 수행한다.
