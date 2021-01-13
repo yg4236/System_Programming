@@ -1,0 +1,65 @@
+0 1 2 EXIT 1056 RDREC 1036
+3 WRREC 105d
+4 5 6 7 8 9 CLOOP 6
+10 RETADR 30
+11 12 13 14 15 16 17 18 RLOOP 1040
+19 20 21 22 23 24 25 26 ENDFIL 1a
+27 28 29 30 31 32 33 34 BUFFER 36
+35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 INPUT 105c LENGTH 33
+53 54 55 56 EOF 2d FIRST 0
+57 58 59 OUTPUT 1076
+60 61 62 63 64 65 WLOOP 1062
+
+START_CODE
+COPY    START   0
+FIRST   STL     RETADR
+        LDB     #LENGTH
+        BASE    LENGTH
+CLOOP   +JSUB   RDREC
+        LDA     LENGTH
+        COMP    #0
+        JEQ     ENDFIL
+        +JSUB   WRREC
+        J       CLOOP
+ENDFIL  LDA     EOF
+        STA     BUFFER
+        LDA     #3
+        STA     LENGTH
+        +JSUB   WRREC  
+        J       @RETADR
+EOF     BYTE    C'EOF'
+RETADR  RESW    1
+LENGTH  RESW    1
+BUFFER  RESB    4096
+.
+.       SUBROUTINE TO READ RECORD INTO BUFFER
+.
+RDREC   CLEAR   X
+        CLEAR   A
+        CLEAR   S
+        +LDT    #4096
+RLOOP   TD      INPUT
+        JEQ     RLOOP
+        RD      INPUT
+        COMPR   A,S
+        JEQ     EXIT
+        STCH    BUFFER,X
+        TIXR    T
+        JLT     RLOOP
+EXIT    STX     LENGTH
+        RSUB
+INPUT   BYTE    X'F1'
+.
+.       SUBROUTINE TO READ RECORD INTO BUFFER
+.
+WRREC   CLEAR   X
+        LDT     LENGTH
+WLOOP   TD      OUTPUT
+        JEQ     WLOOP
+        LDCH    BUFFER,X
+        WD      OUTPUT
+        TIXR    T
+        JLT     WLOOP
+        RSUB
+OUTPUT  BYTE    X'05'
+        END     FIRST
